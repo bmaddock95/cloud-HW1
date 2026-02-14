@@ -1,0 +1,53 @@
+name: Build weatherpy.exe
+
+on:
+  # Trigger 1: Feedback Loop
+  # Run immediately when I push to 'dev' (so I know if I broke it)
+  push:
+    branches:
+      - dev
+      # It is also good practice to include 'main' here so you have 
+      # a record of successful builds on your production branch.
+      - main 
+
+  # Trigger 2: The Gatekeeper
+  # Run when someone tries to merge INTO 'main'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-suite:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Install Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 3. Install Dependencies
+      - name: Install Dependencies
+        run: |
+          pip install pytest flake8
+
+      # 4. Lint
+      # It will read your .flake8 file automatically!
+      - name: Lint with Flake8
+        run: flake8 . --count --show-source --statistics
+
+      # 5. Test
+      # It will read your pyproject.toml file automatically!
+      - name: Run Pytest
+        run: pytest
+
+      # 6. Create an artifact
+      - name: Create Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weatherpy-exe

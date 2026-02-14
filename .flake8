@@ -1,0 +1,8 @@
+[flake8]
+# Exclude the virtual environment (so we don't check library files)
+exclude = .venv, .git, __pycache__, build, dist
+
+# The "Chill" Configuration:
+# We only select code "E9" (Syntax Errors) and "F" (Logic Errors)
+# We ignore "W" (Warnings) and standard "E" (Style Errors)
+select = E9,F
