@@ -43,11 +43,13 @@ jobs:
 
       # 5. Test
       # It will read your pyproject.toml file automatically!
+      # Adding a step to produce a report to save as an artifact.
       - name: Run Pytest
-        run: pytest
+        run: pytest --junitxml=report.xml
 
-      # 6. Create an artifact
+      # 6. Create an artifact, uploading test report
       - name: Create Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: weatherpy-exe
+          name: weatherpy-test-report
+          path: report.xml
